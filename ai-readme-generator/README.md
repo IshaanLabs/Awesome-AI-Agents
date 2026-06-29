@@ -47,7 +47,7 @@ readme/
 
 1. Clone the repository:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/IshaanLabs/Awesome-AI-Agents/tree/main/ai-readme-generator
    cd readme
    ```
 
@@ -122,3 +122,11 @@ The tool will:
 - On the **first run** for a project, embeddings are computed and persisted to `chroma_db/<project_name>/`
 - On **subsequent runs**, the persisted vectors are reloaded — no re-embedding needed
 - To force re-indexing, delete the corresponding folder inside `chroma_db/`
+
+## Contributing
+
+Contributions to this project are welcome! If you have ideas for improvements, bug fixes, or new features, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the MIT License file for details.
