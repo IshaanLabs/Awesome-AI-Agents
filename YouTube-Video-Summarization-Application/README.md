@@ -33,8 +33,11 @@ youtube_summarizer/
 
 1. Clone the repository:
    ```bash
-   git clone <repo-url>
-   cd youtube_summarizer
+   git clone --no-checkout --depth=1 --filter=blob:none https://github.com/IshaanLabs/Awesome-AI-Agents.git
+   cd Awesome-AI-Agents
+   git sparse-checkout set YouTube-Video-Summarization-Application
+   git checkout
+   cd YouTube-Video-Summarization-Application
    ```
 
 2. Create and activate a virtual environment:
