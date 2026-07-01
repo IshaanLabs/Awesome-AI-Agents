@@ -1,0 +1,5 @@
+yt-dlp
+openai-whisper
+haystack-ai
+ollama-haystack
+gradio
