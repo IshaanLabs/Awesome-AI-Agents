@@ -51,8 +51,11 @@ summarise_website/
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/IshaanLabs/summarise_website.git
-cd summarise_website
+git clone --no-checkout --depth=1 --filter=blob:none https://github.com/IshaanLabs/Awesome-AI-Agents.git
+cd Awesome-AI-Agents
+git sparse-checkout set ai-webpage-summarizer
+git checkout
+cd ai-webpage-summarizer
 ```
 
 **2. Create and activate a virtual environment**
