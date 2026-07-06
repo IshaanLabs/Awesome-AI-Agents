@@ -28,13 +28,18 @@ voice2tasks/
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/voice2tasks.git
-cd voice2tasks
-
+git clone --no-checkout --depth=1 --filter=blob:none https://github.com/IshaanLabs/voice2tasks.git
+cd voice2tasks.git
+git sparse-checkout set voice2tasks.git
+git checkout
+cd voice2tasks.git
+```
+```
 # Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-
+```
+```
 # Install dependencies
 pip install -r requirements.txt
 ```
