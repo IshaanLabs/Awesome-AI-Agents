@@ -1,8 +1,14 @@
 openai-whisper
 llama-index-core
-llama-index-llm-ollama
-llama-index-embedding-huggingface
+llama-index-embeddings-huggingface
+llama-index-llms-ollama
 qdrant-client[fastembed]
 fastembed
 torch
-transformers
+transformers==4.47.0
+sentence-transformers>=3.3.0
+numpy<2.0
+pyopenssl==24.2.1
+cryptography==43.0.0
+streamlit==1.35.0
+streamlit-chat
