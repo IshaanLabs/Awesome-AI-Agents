@@ -1,0 +1,8 @@
+openai-whisper
+llama-index-core
+llama-index-llm-ollama
+llama-index-embedding-huggingface
+qdrant-client[fastembed]
+fastembed
+torch
+transformers
