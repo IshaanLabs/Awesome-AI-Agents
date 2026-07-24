@@ -1,0 +1,7 @@
+mem0ai>=2.0.0
+qdrant-client>=1.18.0
+langchain>=1.3.0
+langchain-core>=1.4.0
+langchain-ollama>=1.1.0
+fastmcp>=3.4.0
+rich>=13.0.0
