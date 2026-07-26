@@ -44,8 +44,14 @@ ai-meeting-minutes-generator/
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/IshaanLabs/ai-meeting-minutes-generator.git
+
+git clone --no-checkout --depth=1 --filter=blob:none https://github.com/IshaanLabs/Awesome-AI-Agents.git
+cd Awesome-AI-Agents
+git sparse-checkout set ai-meeting-minutes-generator
+git checkout
 cd ai-meeting-minutes-generator
+
+
 ```
 
 **2. Install Python dependencies**
