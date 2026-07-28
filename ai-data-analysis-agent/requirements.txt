@@ -1,0 +1,10 @@
+langchain
+langchain-community
+langchain-ollama
+langchain-experimental
+duckdb-engine
+sqlalchemy
+streamlit
+pandas
+openpyxl
+duckdb
