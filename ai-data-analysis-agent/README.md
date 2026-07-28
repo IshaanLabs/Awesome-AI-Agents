@@ -43,7 +43,10 @@ tools.py  ──→  main.py (run_agent)  ──→  app.py (Streamlit UI)
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/IshaanLabs
+git clone --no-checkout --depth=1 --filter=blob:none https://github.com/IshaanLabs/Awesome-AI-Agents.git
+cd Awesome-AI-Agents
+git sparse-checkout set ai-data-analysis-agent
+git checkout
 cd ai-data-analysis-agent
 ```
 
