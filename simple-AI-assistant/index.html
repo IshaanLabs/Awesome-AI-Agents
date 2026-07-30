@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Assistant</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #000;
+      color: #ececec;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    #sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 10px;
+      gap: 6px;
+      border-right: 1px solid #1e1e1e;
+    }
+
+    #sidebar h2 {
+      font-size: 13px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 4px 8px 8px;
+    }
+
+    .sidebar-label {
+      font-size: 12px;
+      color: #555;
+      padding: 12px 8px 4px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    #model-select {
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      color: #ececec;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      width: 100%;
+      cursor: pointer;
+      outline: none;
+    }
+
+    #model-select:focus { border-color: #555; }
+
+    #system-prompt {
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      color: #ececec;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      width: 100%;
+      resize: vertical;
+      outline: none;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    #system-prompt:focus { border-color: #555; }
+
+    #save-prompt-btn {
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      color: #aaa;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s, color 0.15s;
+    }
+    #save-prompt-btn:hover { background: #2a2a2a; color: #fff; }
+    #save-prompt-btn.saved { color: #4caf50; border-color: #4caf50; }
+
+    #new-chat-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+      color: #aaa;
+      font-size: 14px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    #new-chat-btn:hover { background: #1a1a1a; color: #fff; }
+
+    /* ── MAIN ── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── WELCOME ── */
+    #welcome {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding-bottom: 80px;
+    }
+
+    #welcome h1 { font-size: 32px; font-weight: 500; color: #fff; }
+
+    /* ── CHAT ── */
+    #chat {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px 20px 20px;
+      scroll-behavior: smooth;
+    }
+
+    #chat::-webkit-scrollbar { width: 6px; }
+    #chat::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+    .msg-wrap { max-width: 720px; margin: 0 auto 28px; }
+    .user-wrap { display: flex; justify-content: flex-end; }
+
+    .user-bubble {
+      background: #2f2f2f;
+      padding: 10px 16px;
+      border-radius: 18px;
+      max-width: 75%;
+      font-size: 15px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    /* markdown output */
+    .ai-text { font-size: 15px; line-height: 1.8; color: #ececec; }
+    .ai-text p { margin-bottom: 12px; }
+    .ai-text p:last-child { margin-bottom: 0; }
+    .ai-text h1,.ai-text h2,.ai-text h3 { margin: 16px 0 8px; color: #fff; }
+    .ai-text ul,.ai-text ol { padding-left: 20px; margin-bottom: 12px; }
+    .ai-text li { margin-bottom: 4px; }
+    .ai-text code:not(pre code) {
+      background: #1e1e1e;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #e06c75;
+    }
+    .ai-text pre {
+      background: #161616;
+      border-radius: 10px;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 14px;
+      background: #1e1e1e;
+      font-size: 12px;
+      color: #666;
+    }
+    .code-header button {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 12px;
+      transition: color 0.15s;
+    }
+    .code-header button:hover { color: #ccc; }
+    .ai-text pre code { display: block; padding: 14px; font-size: 13px; overflow-x: auto; }
+    .ai-text blockquote {
+      border-left: 3px solid #333;
+      padding-left: 12px;
+      color: #888;
+      margin: 8px 0;
+    }
+    .ai-text table { border-collapse: collapse; width: 100%; margin-bottom: 12px; }
+    .ai-text th,.ai-text td { border: 1px solid #2e2e2e; padding: 8px 12px; font-size: 14px; }
+    .ai-text th { background: #1a1a1a; }
+
+    .ai-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .msg-wrap:hover .ai-actions { opacity: 1; }
+    .ai-actions button {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .ai-actions button:hover { color: #ccc; background: #1a1a1a; }
+
+    /* ── DISCLAIMER ── */
+    #disclaimer { display: none; text-align: center; font-size: 12px; color: #555; padding: 6px 0 10px; }
+
+    /* ── INPUT BAR ── */
+    #bar { padding: 12px 16px 20px; display: flex; justify-content: center; }
+
+    #input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      border-radius: 999px;
+      padding: 10px 14px;
+      width: 100%;
+      max-width: 780px;
+      transition: border-color 0.2s;
+    }
+
+    #input-wrap:focus-within { border-color: #555; }
+
+    #input-wrap button.icon-btn {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      transition: color 0.15s;
+    }
+    #input-wrap button.icon-btn:hover { color: #ccc; }
+
+    #input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: #ececec;
+      font-size: 15px;
+      resize: none;
+      max-height: 160px;
+      line-height: 1.5;
+    }
+    #input::placeholder { color: #555; }
+
+    #send-btn {
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    #send-btn:disabled { background: #333; cursor: not-allowed; }
+    #send-btn:disabled svg path { stroke: #666; }
+
+    /* welcome bar slot */
+    #welcome-bar-slot { width: 100%; max-width: 780px; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <h2>AI Assistant</h2>
+    <button id="new-chat-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New chat
+    </button>
+    <div class="sidebar-label">Model</div>
+    <select id="model-select"><option>Loading...</option></select>
+
+    <div class="sidebar-label">System Prompt</div>
+    <textarea id="system-prompt" rows="6" placeholder="Enter system prompt...">You are a helpful, concise, and friendly AI assistant. Answer clearly and accurately.</textarea>
+    <button id="save-prompt-btn">Save</button>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+    <div id="welcome">
+      <h1>What's on the agenda today?</h1>
+      <div id="welcome-bar-slot"></div>
+    </div>
+
+    <div id="chat"></div>
+    <div id="disclaimer">AI can make mistakes. Double-check important info.</div>
+
+    <div id="bar">
+      <div id="input-wrap">
+        <button class="icon-btn" title="Attach">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <textarea id="input" rows="1" placeholder="Ask anything"></textarea>
+        <button class="icon-btn" title="Voice">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </button>
+        <button id="send-btn" disabled title="Send">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatEl = document.getElementById("chat");
+    const inputEl = document.getElementById("input");
+    const sendBtn = document.getElementById("send-btn");
+    const welcomeEl = document.getElementById("welcome");
+    const disclaimerEl = document.getElementById("disclaimer");
+    const barEl = document.getElementById("bar");
+    const welcomeBarSlot = document.getElementById("welcome-bar-slot");
+    const inputWrap = document.getElementById("input-wrap");
+    const modelSelect = document.getElementById("model-select");
+    const newChatBtn = document.getElementById("new-chat-btn");
+    const systemPromptEl = document.getElementById("system-prompt");
+    const savePromptBtn = document.getElementById("save-prompt-btn");
+
+    let systemPrompt = systemPromptEl.value;
+
+    savePromptBtn.addEventListener("click", () => {
+      systemPrompt = systemPromptEl.value.trim();
+      savePromptBtn.textContent = "Saved ✓";
+      savePromptBtn.classList.add("saved");
+      setTimeout(() => { savePromptBtn.textContent = "Save"; savePromptBtn.classList.remove("saved"); }, 1500);
+    });
+
+    let history = [];
+    let chatStarted = false;
+
+    // marked config
+    marked.setOptions({ breaks: true, gfm: true });
+
+    // Move input bar into welcome slot initially
+    welcomeBarSlot.appendChild(inputWrap);
+
+    // Load models
+    fetch("/models").then(r => r.json()).then(data => {
+      modelSelect.innerHTML = "";
+      (data.models.length ? data.models : ["llama3.2"]).forEach(m => {
+        const o = document.createElement("option");
+        o.value = o.textContent = m;
+        modelSelect.appendChild(o);
+      });
+    }).catch(() => {
+      modelSelect.innerHTML = "<option>llama3.2</option>";
+    });
+
+    newChatBtn.addEventListener("click", () => {
+      history = [];
+      chatEl.innerHTML = "";
+      chatEl.style.display = "none";
+      disclaimerEl.style.display = "none";
+      welcomeEl.style.display = "flex";
+      welcomeBarSlot.appendChild(inputWrap);
+      chatStarted = false;
+      inputEl.value = "";
+      inputEl.style.height = "auto";
+      sendBtn.disabled = true;
+    });
+
+    function startChat() {
+      if (chatStarted) return;
+      chatStarted = true;
+      welcomeEl.style.display = "none";
+      chatEl.style.display = "block";
+      disclaimerEl.style.display = "block";
+      barEl.appendChild(inputWrap);
+    }
+
+    function autoResize() {
+      inputEl.style.height = "auto";
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + "px";
+    }
+
+    inputEl.addEventListener("input", () => {
+      autoResize();
+      sendBtn.disabled = !inputEl.value.trim();
+    });
+
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); }
+    });
+
+    sendBtn.addEventListener("click", submit);
+
+    function renderMarkdown(text) {
+      const html = marked.parse(text);
+      const div = document.createElement("div");
+      div.className = "ai-text";
+      div.innerHTML = html;
+
+      // add copy button to each code block
+      div.querySelectorAll("pre").forEach(pre => {
+        const code = pre.querySelector("code");
+        const lang = (code.className.match(/language-(\w+)/) || [])[1] || "";
+        const header = document.createElement("div");
+        header.className = "code-header";
+        header.innerHTML = `<span>${lang}</span><button onclick="copyCode(this)">Copy</button>`;
+        pre.insertBefore(header, code);
+        hljs.highlightElement(code);
+      });
+
+      return div;
+    }
+
+    window.copyCode = (btn) => {
+      const code = btn.closest("pre").querySelector("code").innerText;
+      navigator.clipboard.writeText(code);
+      btn.textContent = "Copied!";
+      setTimeout(() => btn.textContent = "Copy", 1500);
+    };
+
+    async function submit() {
+      const text = inputEl.value.trim();
+      if (!text || sendBtn.disabled) return;
+
+      startChat();
+      inputEl.value = "";
+      inputEl.style.height = "auto";
+      sendBtn.disabled = true;
+
+      history.push({ role: "user", content: text });
+
+      const userWrap = document.createElement("div");
+      userWrap.className = "msg-wrap user-wrap";
+      userWrap.innerHTML = `<div class="user-bubble">${escHtml(text)}</div>`;
+      chatEl.appendChild(userWrap);
+
+      const aiWrap = document.createElement("div");
+      aiWrap.className = "msg-wrap";
+      const aiText = document.createElement("div");
+      aiText.className = "ai-text";
+      aiText.textContent = "▌";
+      aiWrap.appendChild(aiText);
+      chatEl.appendChild(aiWrap);
+      chatEl.scrollTop = chatEl.scrollHeight;
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: systemPrompt
+            ? [{ role: "system", content: systemPrompt }, ...history]
+            : history,
+          model: modelSelect.value
+        }),
+      });
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let reply = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        reply += decoder.decode(value);
+        // live render markdown while streaming
+        aiText.innerHTML = marked.parse(reply + " ▌");
+        chatEl.scrollTop = chatEl.scrollHeight;
+      }
+
+      // render final markdown with syntax highlighting
+      const rendered = renderMarkdown(reply);
+      aiWrap.replaceChild(rendered, aiText);
+
+      history.push({ role: "assistant", content: reply });
+
+      const actions = document.createElement("div");
+      actions.className = "ai-actions";
+      actions.innerHTML = `
+        <button title="Copy" onclick="navigator.clipboard.writeText(\`${reply.replace(/`/g,'\\`')}\`);this.textContent='✅';setTimeout(()=>this.textContent='📋',1500)">📋</button>
+        <button title="Good">👍</button>
+        <button title="Bad">👎</button>
+        <button title="Regenerate" onclick="regenerate()">🔄</button>
+      `;
+      aiWrap.appendChild(actions);
+
+      sendBtn.disabled = false;
+      inputEl.focus();
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function regenerate() {
+      if (history.length < 2) return;
+      history.pop();
+      const lastUserMsg = history[history.length - 1].content;
+      history.pop();
+      const wraps = chatEl.querySelectorAll(".msg-wrap");
+      wraps[wraps.length - 1].remove();
+      wraps[wraps.length - 2].remove();
+      inputEl.value = lastUserMsg;
+      autoResize();
+      sendBtn.disabled = false;
+      submit();
+    }
+
+    function escHtml(t) {
+      return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+  </script>
+</body>
+</html>
