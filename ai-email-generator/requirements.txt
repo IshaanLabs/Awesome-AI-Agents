@@ -1,0 +1,4 @@
+streamlit
+langchain-ollama
+langchain-core
+python-dotenv
