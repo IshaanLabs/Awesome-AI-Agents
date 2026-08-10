@@ -1,0 +1,55 @@
+# Photosynthesis — Biology Notes
+
+Photosynthesis is the process by which green plants make their own food using sunlight, carbon dioxide, and water. This process mainly takes place in the leaves of plants, inside structures called chloroplasts. Chloroplasts contain a green pigment called chlorophyll, which absorbs light energy from the Sun.
+
+The overall equation for photosynthesis is:
+
+**Carbon dioxide + Water → Glucose + Oxygen**
+
+Light energy is required for this reaction. The carbon dioxide enters the plant through tiny pores on the surface of leaves called stomata. Water is absorbed from the soil by the roots and transported to the leaves through xylem vessels.
+
+Photosynthesis can be divided into two main stages: the light-dependent reactions and the light-independent reactions.
+
+### Light-Dependent Reactions
+
+The light-dependent reactions occur in the thylakoid membranes of the chloroplasts. Chlorophyll absorbs sunlight and uses this energy to split water molecules. This process is called photolysis. Oxygen is produced as a by-product and is released into the atmosphere.
+
+The energy captured from sunlight is used to produce ATP and NADPH. These molecules provide energy and reducing power for the next stage of photosynthesis.
+
+### Light-Independent Reactions
+
+The light-independent reactions, also known as the Calvin cycle, occur in the stroma of the chloroplast. They do not directly require sunlight, although they depend on ATP and NADPH produced during the light-dependent reactions.
+
+During the Calvin cycle, carbon dioxide is combined with other molecules and eventually converted into glucose. The glucose produced by photosynthesis can be used by the plant for respiration, converted into starch for storage, or used to make other substances needed for growth.
+
+### Factors Affecting Photosynthesis
+
+The rate of photosynthesis is affected by several factors.
+
+**Light intensity:** Increasing light intensity generally increases the rate of photosynthesis until another factor becomes limiting.
+
+**Carbon dioxide concentration:** Increasing carbon dioxide concentration can increase the rate of photosynthesis, but only up to a certain point.
+
+**Temperature:** Photosynthesis is controlled by enzymes, so temperature affects its rate. At very low temperatures, reactions occur slowly. As temperature increases, the rate increases until an optimum temperature is reached. Beyond this point, enzymes can become denatured and the rate decreases.
+
+**Water availability:** Water is an essential raw material for photosynthesis. If a plant does not receive enough water, its stomata may close, reducing carbon dioxide intake and therefore slowing photosynthesis.
+
+### Importance of Photosynthesis
+
+Photosynthesis is extremely important because it produces glucose, which provides plants with energy and materials for growth. Plants also form the base of many food chains, so photosynthesis indirectly provides energy to animals and humans.
+
+Another important role of photosynthesis is the production of oxygen. The oxygen released during photosynthesis is essential for aerobic respiration in most living organisms.
+
+### Key Terms
+
+* **Chlorophyll:** Green pigment that absorbs light energy.
+* **Chloroplast:** Organelle where photosynthesis takes place.
+* **Stomata:** Tiny openings that allow gases to enter and leave the leaf.
+* **Photolysis:** Splitting of water using light energy.
+* **ATP:** Energy-carrying molecule used in cellular processes.
+* **Calvin cycle:** Series of reactions that convert carbon dioxide into carbohydrates.
+* **Limiting factor:** A factor that restricts the rate of a process.
+
+### Important Point
+
+Photosynthesis converts **light energy into chemical energy stored in glucose**. The process is essential for plants, food chains, and the oxygen supply of Earth's atmosphere.
