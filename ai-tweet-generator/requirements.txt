@@ -1,0 +1,8 @@
+streamlit
+langchain
+langchain-ollama
+langchain-community
+langchain-core
+langchain-text-splitters
+requests
+tavily-python
