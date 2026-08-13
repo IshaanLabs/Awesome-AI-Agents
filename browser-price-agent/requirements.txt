@@ -1,0 +1,2 @@
+mcp-haystack
+ollama-haystack
