@@ -1,0 +1,5 @@
+fastmcp
+pandas
+langchain
+langchain-mcp-adapters
+langchain-ollama
